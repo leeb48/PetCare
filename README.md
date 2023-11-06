@@ -28,5 +28,10 @@
     - name
     - visits
 - Visits
+    - veterinarian
+    - pet
     - DateTime
     - Description
+- Veterinarian
+    - Name
+    - visits
