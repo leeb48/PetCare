@@ -15,18 +15,18 @@
 
 ## Data Models
 - Owner
- - Name
- - Addr
- - City
- - State
- - phone
- - email
- - pets
+    - Name
+    - Addr
+    - City
+    - State
+    - phone
+    - email
+    - pets
 - Pets
- - birthdate
- - type
- - name
- - visits
+    - birthdate
+    - type
+    - name
+    - visits
 - Visits
- - DateTime
- - Description
+    - DateTime
+    - Description
