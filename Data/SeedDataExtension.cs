@@ -1,4 +1,5 @@
-using PetCare.Modules.Owner;
+using PetCare.Modules.OwnerModule;
+using PetCare.Modules.PetModule;
 
 namespace PetCare.Data;
 
@@ -12,7 +13,7 @@ public static class SeedDataExtension
 
         context.Database.EnsureCreated();
 
-        if (context.Owners.Any())
+        if (context.Owners.Any() && context.Pets.Any())
             return;
 
         var owners = new Owner[]
@@ -24,7 +25,11 @@ public static class SeedDataExtension
                 Address = "1212 Beautify St",
                 State = "NV",
                 PhoneNumber = "1231231234",
-                Email = "lovely@test.com"
+                Email = "lovely@test.com",
+                Pets = new List<Pet>()
+                {
+                    new() { Name = "Acorn", Birthdate = new DateTime(2020, 4, 10) }
+                }
             },
             new()
             {
@@ -33,7 +38,11 @@ public static class SeedDataExtension
                 Address = "3232 Nerd Ave",
                 State = "NV",
                 PhoneNumber = "3213214321",
-                Email = "bongster@test.com"
+                Email = "bongster@test.com",
+                Pets = new List<Pet>()
+                {
+                    new() { Name = "Mango", Birthdate = new DateTime(2019, 5, 10) }
+                }
             },
             new()
             {

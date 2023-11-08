@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using PetCare.Modules.Owner;
+using PetCare.Modules.OwnerModule;
+using PetCare.Modules.PetModule;
 
 namespace PetCare.Data;
 
@@ -9,4 +10,5 @@ public class PetCareContext : DbContext
         : base(options) { }
 
     public DbSet<Owner> Owners { get; set; }
+    public DbSet<Pet> Pets { get; set; }
 }

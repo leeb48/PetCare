@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
-using PetCare.Modules.Owner;
+using PetCare.Modules.OwnerModule;
 
 var builder = WebApplication.CreateBuilder(args);
 

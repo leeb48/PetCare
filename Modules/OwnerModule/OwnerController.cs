@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PetCare.Modules.Owner;
+namespace PetCare.Modules.OwnerModule;
 
 [ApiController]
 [Route("[controller]")]
@@ -14,10 +14,10 @@ public class OwnerController : Controller
     }
 
     [HttpGet]
-    public ActionResult<List<Owner>> GetOwnerByLastName(string lastName)
+    public IActionResult GetOwnerByLastName(string lastName)
     {
         var result = _ownerService.FindByLastName(lastName);
 
-        return result;
+        return Ok(result);
     }
 }

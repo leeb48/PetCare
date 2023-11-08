@@ -1,6 +1,6 @@
 using PetCare.Models;
 
-namespace PetCare.Pet;
+namespace PetCare.Modules.PetModule;
 
 public class PetType : BaseEntity
 {
