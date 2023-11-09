@@ -11,8 +11,8 @@ using PetCare.Data;
 namespace PetCare.Migrations
 {
     [DbContext(typeof(PetCareContext))]
-    [Migration("20231107071349_OwnerNameRequired")]
-    partial class OwnerNameRequired
+    [Migration("20231109053020_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,19 +20,22 @@ namespace PetCare.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
-            modelBuilder.Entity("PetCare.Modules.Owner.Owner", b =>
+            modelBuilder.Entity("PetCare.Modules.OwnerModule.Owner", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Birthdate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
@@ -44,14 +47,51 @@ namespace PetCare.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Owners");
+                });
+
+            modelBuilder.Entity("PetCare.Modules.PetModule.Pet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OwnerId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Pets");
+                });
+
+            modelBuilder.Entity("PetCare.Modules.PetModule.Pet", b =>
+                {
+                    b.HasOne("PetCare.Modules.OwnerModule.Owner", null)
+                        .WithMany("Pets")
+                        .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("PetCare.Modules.OwnerModule.Owner", b =>
+                {
+                    b.Navigation("Pets");
                 });
 #pragma warning restore 612, 618
         }

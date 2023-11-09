@@ -5,8 +5,8 @@ namespace PetCare.Modules.PetModule;
 
 public class Pet : BaseEntity
 {
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     [DataType(DataType.Date)]
-    public DateTime? Birthdate { get; set; }
+    public required DateTime Birthdate { get; set; }
 }

@@ -13,11 +13,43 @@ public class OwnerController : Controller
         _ownerService = ownerService;
     }
 
-    [HttpGet]
-    public IActionResult GetOwnerByLastName(string lastName)
+    [HttpPost]
+    public ActionResult<Owner> CreateOwner(Owner owner)
     {
-        var result = _ownerService.FindByLastName(lastName);
+        var newOwner = _ownerService.CreateOwner(owner);
 
-        return Ok(result);
+        return newOwner;
+    }
+
+    [HttpPatch("{id}")]
+    public ActionResult<Owner> UpdateOwner(int id, Owner owner)
+    {
+        var updatedOwner = _ownerService.UpdateOwner(id, owner);
+
+        return updatedOwner;
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteOwner(int id)
+    {
+        _ownerService.RemoveOwner(id);
+
+        return Ok();
+    }
+
+    [HttpGet("birthdate")]
+    public IActionResult FindByBirthdate(DateTime date)
+    {
+        var owners = _ownerService.FindByBirthdate(date);
+
+        return Ok(owners);
+    }
+
+    [HttpGet]
+    public IActionResult FindByLastName(string lastName)
+    {
+        var owners = _ownerService.FindByLastName(lastName);
+
+        return Ok(owners);
     }
 }

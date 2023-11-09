@@ -29,7 +29,8 @@ public static class SeedDataExtension
                 Pets = new List<Pet>()
                 {
                     new() { Name = "Acorn", Birthdate = new DateTime(2020, 4, 10) }
-                }
+                },
+                Birthdate = new DateTime(1996, 05, 31),
             },
             new()
             {
@@ -42,7 +43,8 @@ public static class SeedDataExtension
                 Pets = new List<Pet>()
                 {
                     new() { Name = "Mango", Birthdate = new DateTime(2019, 5, 10) }
-                }
+                },
+                Birthdate = new DateTime(1991, 03, 14),
             },
             new()
             {
@@ -51,7 +53,8 @@ public static class SeedDataExtension
                 Address = "4848 Golden Dr",
                 State = "NV",
                 PhoneNumber = "1295432323",
-                Email = "mango@test.com"
+                Email = "mango@test.com",
+                Birthdate = new DateTime(1996, 05, 31),
             },
             new()
             {
@@ -60,7 +63,8 @@ public static class SeedDataExtension
                 Address = "4959 Corgi St",
                 State = "NV",
                 PhoneNumber = "4051231232",
-                Email = "acorn@test.com"
+                Email = "acorn@test.com",
+                Birthdate = new DateTime(1996, 05, 31),
             },
         };
 
