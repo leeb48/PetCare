@@ -1,25 +1,31 @@
-using System.Security.Cryptography;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
+using PetCare.Modules.OwnerModule.DTO;
 using PetCare.Modules.PetModule;
+using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
 
 public class OwnerService : IOwnerService
 {
     private readonly PetCareContext _context;
+    private readonly IMapper _mapper;
 
-    public OwnerService(PetCareContext context)
+    public OwnerService(PetCareContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public Owner CreateOwner(Owner newOwner)
+    public OwnerDTO CreateOwner(OwnerDTO ownerDTO)
     {
+        var newOwner = _mapper.Map<Owner>(ownerDTO);
+
         _context.Owners.Add(newOwner);
         _context.SaveChanges();
 
-        return newOwner;
+        return ownerDTO;
     }
 
     public Owner UpdateOwner(int id, Owner owner)
@@ -58,18 +64,34 @@ public class OwnerService : IOwnerService
 
         var owners = query
             .Where(owner => owner.Birthdate == birthdate)
-            .Include(owner => owner.Pets);
+            .Include(owner => owner.Pets!)
+            .ThenInclude(pet => pet.PetType);
 
         return owners;
     }
 
-    public IEnumerable<Owner> FindByLastName(string lastName)
+    public IEnumerable<OwnerDTO> FindByLastName(string lastName)
     {
         var query = from owner in _context.Owners select owner;
 
         var owners = query
             .Where(owner => string.Equals(owner.LastName!.ToLower(), lastName.ToLower()))
-            .Include(owner => owner.Pets);
+            .Include(owner => owner.Pets!)
+            .ThenInclude(pet => pet.PetType)
+            .Select(
+                owner =>
+                    new OwnerDTO
+                    {
+                        Id = owner.Id,
+                        FirstName = owner.FirstName,
+                        LastName = owner.LastName,
+                        Pets = owner.Pets!
+                            .Select(
+                                pet => new PetDTO { Name = pet.Name, PetType = pet.PetType.Name }
+                            )
+                            .ToList()
+                    }
+            );
 
         return owners;
     }

@@ -1,5 +1,6 @@
 using PetCare.Modules.OwnerModule;
 using PetCare.Modules.PetModule;
+using SQLitePCL;
 
 namespace PetCare.Data;
 
@@ -16,6 +17,12 @@ public static class SeedDataExtension
         if (context.Owners.Any() && context.Pets.Any())
             return;
 
+        var dog = new PetType() { Name = "Dog" };
+        var cat = new PetType() { Name = "Cat" };
+        var other = new PetType() { Name = "Other" };
+
+        var petTypes = new PetType[] { dog, cat, other };
+
         var owners = new Owner[]
         {
             new()
@@ -28,7 +35,12 @@ public static class SeedDataExtension
                 Email = "lovely@test.com",
                 Pets = new List<Pet>()
                 {
-                    new() { Name = "Acorn", Birthdate = new DateTime(2020, 4, 10) }
+                    new()
+                    {
+                        Name = "Acorn",
+                        Birthdate = new DateTime(2020, 4, 10),
+                        PetType = dog
+                    }
                 },
                 Birthdate = new DateTime(1996, 05, 31),
             },
@@ -42,7 +54,12 @@ public static class SeedDataExtension
                 Email = "bongster@test.com",
                 Pets = new List<Pet>()
                 {
-                    new() { Name = "Mango", Birthdate = new DateTime(2019, 5, 10) }
+                    new()
+                    {
+                        Name = "Mango",
+                        Birthdate = new DateTime(2019, 5, 10),
+                        PetType = dog
+                    }
                 },
                 Birthdate = new DateTime(1991, 03, 14),
             },
@@ -68,6 +85,7 @@ public static class SeedDataExtension
             },
         };
 
+        context.PetTypes.AddRange(petTypes);
         context.Owners.AddRange(owners);
         context.SaveChanges();
     }

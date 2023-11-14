@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PetCare.Modules.OwnerModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
 
@@ -14,7 +15,7 @@ public class OwnerController : Controller
     }
 
     [HttpPost]
-    public ActionResult<Owner> CreateOwner(Owner owner)
+    public ActionResult<OwnerDTO> CreateOwner(OwnerDTO owner)
     {
         var newOwner = _ownerService.CreateOwner(owner);
 

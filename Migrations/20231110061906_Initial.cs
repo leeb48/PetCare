@@ -31,6 +31,19 @@ namespace PetCare.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PetTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PetTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pets",
                 columns: table => new
                 {
@@ -38,6 +51,7 @@ namespace PetCare.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Birthdate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PetTypeId = table.Column<int>(type: "INTEGER", nullable: false),
                     OwnerId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -48,12 +62,23 @@ namespace PetCare.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Owners",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pets_PetTypes_PetTypeId",
+                        column: x => x.PetTypeId,
+                        principalTable: "PetTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pets_OwnerId",
                 table: "Pets",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pets_PetTypeId",
+                table: "Pets",
+                column: "PetTypeId");
         }
 
         /// <inheritdoc />
@@ -64,6 +89,9 @@ namespace PetCare.Migrations
 
             migrationBuilder.DropTable(
                 name: "Owners");
+
+            migrationBuilder.DropTable(
+                name: "PetTypes");
         }
     }
 }

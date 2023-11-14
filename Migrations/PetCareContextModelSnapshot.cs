@@ -62,7 +62,8 @@ namespace PetCare.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Birthdate")
+                    b.Property<DateTime?>("Birthdate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -72,11 +73,30 @@ namespace PetCare.Migrations
                     b.Property<int?>("OwnerId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PetTypeId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
+                    b.HasIndex("PetTypeId");
+
                     b.ToTable("Pets");
+                });
+
+            modelBuilder.Entity("PetCare.Modules.PetModule.PetType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PetTypes");
                 });
 
             modelBuilder.Entity("PetCare.Modules.PetModule.Pet", b =>
@@ -84,6 +104,14 @@ namespace PetCare.Migrations
                     b.HasOne("PetCare.Modules.OwnerModule.Owner", null)
                         .WithMany("Pets")
                         .HasForeignKey("OwnerId");
+
+                    b.HasOne("PetCare.Modules.PetModule.PetType", "PetType")
+                        .WithMany()
+                        .HasForeignKey("PetTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PetType");
                 });
 
             modelBuilder.Entity("PetCare.Modules.OwnerModule.Owner", b =>
