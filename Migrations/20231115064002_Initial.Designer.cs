@@ -11,7 +11,7 @@ using PetCare.Data;
 namespace PetCare.Migrations
 {
     [DbContext(typeof(PetCareContext))]
-    [Migration("20231110061906_Initial")]
+    [Migration("20231115064002_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -30,7 +30,7 @@ namespace PetCare.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("Birthdate")
+                    b.Property<DateOnly?>("Birthdate")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -65,15 +65,14 @@ namespace PetCare.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("Birthdate")
-                        .IsRequired()
+                    b.Property<DateOnly>("Birthdate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("OwnerId")
+                    b.Property<int>("OwnerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PetTypeId")
@@ -95,6 +94,7 @@ namespace PetCare.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -106,7 +106,9 @@ namespace PetCare.Migrations
                 {
                     b.HasOne("PetCare.Modules.OwnerModule.Owner", null)
                         .WithMany("Pets")
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PetCare.Modules.PetModule.PetType", "PetType")
                         .WithMany()

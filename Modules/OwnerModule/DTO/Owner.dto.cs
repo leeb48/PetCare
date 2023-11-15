@@ -12,6 +12,6 @@ public class OwnerDTO
     public string? State { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
-    public DateTime? Birthdate { get; set; }
+    public DateOnly? Birthdate { get; set; }
     public IList<PetDTO>? Pets { get; set; }
 }

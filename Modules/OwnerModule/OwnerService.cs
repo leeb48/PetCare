@@ -1,4 +1,6 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Modules.OwnerModule.DTO;
@@ -18,23 +20,39 @@ public class OwnerService : IOwnerService
         _mapper = mapper;
     }
 
-    public OwnerDTO CreateOwner(OwnerDTO ownerDTO)
+    public CreateOwnerDTO CreateOwner(CreateOwnerDTO createOwnerDTO)
     {
-        var newOwner = _mapper.Map<Owner>(ownerDTO);
+        var newOwner = _mapper.Map<Owner>(createOwnerDTO);
 
         _context.Owners.Add(newOwner);
         _context.SaveChanges();
 
-        return ownerDTO;
+        createOwnerDTO.Id = newOwner.Id;
+
+        return createOwnerDTO;
     }
 
-    public Owner UpdateOwner(int id, Owner owner)
+    public OwnerDTO UpdateOwner(int id, OwnerDTO ownerDTO)
     {
-        owner.Id = id;
-        _context.Owners.Update(owner);
+        var owner = FindById(id) ?? throw new Exception("Owner not found");
+
+        foreach (var dtoProp in typeof(OwnerDTO).GetProperties())
+        {
+            var dtoValue = dtoProp.GetValue(ownerDTO);
+
+            var ownerProp = typeof(Owner).GetProperty(dtoProp.Name);
+
+            if (dtoValue != null && ownerProp != null)
+            {
+                ownerProp.SetValue(owner, dtoValue);
+            }
+        }
+
         _context.SaveChanges();
 
-        return owner;
+        ownerDTO = _mapper.Map<OwnerDTO>(owner);
+
+        return ownerDTO;
     }
 
     public void RemoveOwner(int id)
@@ -48,9 +66,36 @@ public class OwnerService : IOwnerService
         }
     }
 
-    public Owner AddPet(int id, Pet pet)
+    public Owner AddPet(int id, PetDTO petDTO)
     {
+        // link pet and user
+        // when we see a new pet type, create one
         throw new NotImplementedException();
+    }
+
+    public OwnerDTO? FindByIdDTO(int id)
+    {
+        var query = from owner in _context.Owners where owner.Id == id select owner;
+
+        return query
+            .Include(owner => owner.Pets!)
+            .ThenInclude(pet => pet.PetType)
+            .Select(
+                owner =>
+                    new OwnerDTO
+                    {
+                        Id = owner.Id,
+                        FirstName = owner.FirstName,
+                        LastName = owner.LastName,
+                        Birthdate = owner.Birthdate,
+                        Pets = owner.Pets!
+                            .Select(
+                                pet => new PetDTO { Name = pet.Name, PetType = pet.PetType.Name }
+                            )
+                            .ToList()
+                    }
+            )
+            .FirstOrDefault();
     }
 
     public Owner? FindById(int id)
@@ -58,14 +103,35 @@ public class OwnerService : IOwnerService
         return _context.Owners.FirstOrDefault(owner => owner.Id == id);
     }
 
-    public IEnumerable<Owner> FindByBirthdate(DateTime birthdate)
+    public IEnumerable<OwnerDTO> FindByBirthdate(DateOnly birthdate)
     {
         var query = from owner in _context.Owners select owner;
 
         var owners = query
             .Where(owner => owner.Birthdate == birthdate)
             .Include(owner => owner.Pets!)
-            .ThenInclude(pet => pet.PetType);
+            .ThenInclude(pet => pet.PetType)
+            .Select(
+                owner =>
+                    new OwnerDTO
+                    {
+                        Id = owner.Id,
+                        FirstName = owner.FirstName,
+                        LastName = owner.LastName,
+                        Birthdate = owner.Birthdate,
+                        Pets = owner.Pets!
+                            .Select(
+                                pet =>
+                                    new PetDTO
+                                    {
+                                        Name = pet.Name,
+                                        Birthdate = pet.Birthdate,
+                                        PetType = pet.PetType.Name
+                                    }
+                            )
+                            .ToList()
+                    }
+            );
 
         return owners;
     }
@@ -85,9 +151,16 @@ public class OwnerService : IOwnerService
                         Id = owner.Id,
                         FirstName = owner.FirstName,
                         LastName = owner.LastName,
+                        Birthdate = owner.Birthdate,
                         Pets = owner.Pets!
                             .Select(
-                                pet => new PetDTO { Name = pet.Name, PetType = pet.PetType.Name }
+                                pet =>
+                                    new PetDTO
+                                    {
+                                        Name = pet.Name,
+                                        Birthdate = pet.Birthdate,
+                                        PetType = pet.PetType.Name
+                                    }
                             )
                             .ToList()
                     }

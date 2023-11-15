@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PetCare.Modules.OwnerModule.DTO;
 
@@ -8,26 +9,46 @@ namespace PetCare.Modules.OwnerModule;
 public class OwnerController : Controller
 {
     private readonly IOwnerService _ownerService;
+    private readonly IMapper _mapper;
 
-    public OwnerController(IOwnerService ownerService)
+    public OwnerController(IOwnerService ownerService, IMapper mapper)
     {
         _ownerService = ownerService;
+        _mapper = mapper;
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<OwnerDTO> GetOwnerById(int id)
+    {
+        var owner = _ownerService.FindById(id);
+
+        var ownerDto = _mapper.Map<OwnerDTO>(owner);
+
+        return ownerDto;
     }
 
     [HttpPost]
-    public ActionResult<OwnerDTO> CreateOwner(OwnerDTO owner)
+    public ActionResult<CreateOwnerDTO> CreateOwner(CreateOwnerDTO createOwnerDTO)
     {
-        var newOwner = _ownerService.CreateOwner(owner);
+        var newOwner = _ownerService.CreateOwner(createOwnerDTO);
 
         return newOwner;
     }
 
     [HttpPatch("{id}")]
-    public ActionResult<Owner> UpdateOwner(int id, Owner owner)
+    public ActionResult<OwnerDTO> UpdateOwner(int id, OwnerDTO ownerDTO)
     {
-        var updatedOwner = _ownerService.UpdateOwner(id, owner);
+        try
+        {
+            var updatedOwner = _ownerService.UpdateOwner(id, ownerDTO);
 
-        return updatedOwner;
+            return updatedOwner;
+        }
+        catch (Exception ex)
+        {
+            var errorResponse = Json(new { ex.Message }).Value;
+            return StatusCode(500, errorResponse);
+        }
     }
 
     [HttpDelete("{id}")]
@@ -39,7 +60,7 @@ public class OwnerController : Controller
     }
 
     [HttpGet("birthdate")]
-    public IActionResult FindByBirthdate(DateTime date)
+    public IActionResult FindByBirthdate(DateOnly date)
     {
         var owners = _ownerService.FindByBirthdate(date);
 

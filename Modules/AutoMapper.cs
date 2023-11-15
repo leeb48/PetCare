@@ -10,5 +10,8 @@ public class AutoMapper : Profile
     {
         CreateMap<Owner, OwnerDTO>();
         CreateMap<OwnerDTO, Owner>();
+
+        CreateMap<Owner, CreateOwnerDTO>();
+        CreateMap<CreateOwnerDTO, Owner>();
     }
 }

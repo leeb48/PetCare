@@ -38,11 +38,11 @@ public static class SeedDataExtension
                     new()
                     {
                         Name = "Acorn",
-                        Birthdate = new DateTime(2020, 4, 10),
+                        Birthdate = new DateOnly(2020, 4, 10),
                         PetType = dog
                     }
                 },
-                Birthdate = new DateTime(1996, 05, 31),
+                Birthdate = new DateOnly(1996, 05, 31),
             },
             new()
             {
@@ -57,11 +57,11 @@ public static class SeedDataExtension
                     new()
                     {
                         Name = "Mango",
-                        Birthdate = new DateTime(2019, 5, 10),
+                        Birthdate = new DateOnly(2019, 5, 10),
                         PetType = dog
                     }
                 },
-                Birthdate = new DateTime(1991, 03, 14),
+                Birthdate = new DateOnly(1991, 03, 14),
             },
             new()
             {
@@ -71,7 +71,7 @@ public static class SeedDataExtension
                 State = "NV",
                 PhoneNumber = "1295432323",
                 Email = "mango@test.com",
-                Birthdate = new DateTime(1996, 05, 31),
+                Birthdate = new DateOnly(1996, 05, 31),
             },
             new()
             {
@@ -81,7 +81,7 @@ public static class SeedDataExtension
                 State = "NV",
                 PhoneNumber = "4051231232",
                 Email = "acorn@test.com",
-                Birthdate = new DateTime(1996, 05, 31),
+                Birthdate = new DateOnly(1996, 05, 31),
             },
         };
 

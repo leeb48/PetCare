@@ -23,7 +23,7 @@ namespace PetCare.Migrations
                     State = table.Column<string>(type: "TEXT", nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Birthdate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Birthdate = table.Column<DateOnly>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,7 +36,7 @@ namespace PetCare.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,9 +50,9 @@ namespace PetCare.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Birthdate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Birthdate = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     PetTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    OwnerId = table.Column<int>(type: "INTEGER", nullable: true)
+                    OwnerId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,7 +61,8 @@ namespace PetCare.Migrations
                         name: "FK_Pets_Owners_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Owners",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Pets_PetTypes_PetTypeId",
                         column: x => x.PetTypeId,

@@ -1,15 +1,15 @@
 using PetCare.Modules.OwnerModule.DTO;
-using PetCare.Modules.PetModule;
+using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
 
 public interface IOwnerService
 {
-    public OwnerDTO CreateOwner(OwnerDTO ownerDTO);
-    public Owner UpdateOwner(int id, Owner ownerDTO);
+    public CreateOwnerDTO CreateOwner(CreateOwnerDTO createOwnerDTO);
+    public OwnerDTO UpdateOwner(int id, OwnerDTO ownerDTO);
     public void RemoveOwner(int id);
-    public Owner AddPet(int id, Pet pet);
+    public Owner AddPet(int id, PetDTO petDTO);
     public Owner? FindById(int id);
+    public IEnumerable<OwnerDTO> FindByBirthdate(DateOnly birthdate);
     public IEnumerable<OwnerDTO> FindByLastName(string lastName);
-    public IEnumerable<Owner> FindByBirthdate(DateTime birthdate);
 }

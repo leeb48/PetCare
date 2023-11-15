@@ -11,7 +11,7 @@ public class Pet : BaseEntity
 
     [DataType(DataType.Date)]
     [Required]
-    public DateTime Birthdate { get; set; }
+    public DateOnly Birthdate { get; set; }
 
     [Required]
     public required PetType PetType { get; set; }
