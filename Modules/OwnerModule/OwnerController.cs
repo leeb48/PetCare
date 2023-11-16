@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PetCare.Modules.OwnerModule.DTO;
+using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
 
@@ -20,19 +21,31 @@ public class OwnerController : Controller
     [HttpGet("{id}")]
     public ActionResult<OwnerDTO> GetOwnerById(int id)
     {
-        var owner = _ownerService.FindById(id);
+        var owner = _ownerService.FindByIdDTO(id);
 
-        var ownerDto = _mapper.Map<OwnerDTO>(owner);
+        if (owner == null)
+        {
+            var response = Json(new { message = "Not found" }).Value;
+            return StatusCode(404, response);
+        }
 
-        return ownerDto;
+        return owner;
     }
 
     [HttpPost]
     public ActionResult<CreateOwnerDTO> CreateOwner(CreateOwnerDTO createOwnerDTO)
     {
-        var newOwner = _ownerService.CreateOwner(createOwnerDTO);
+        try
+        {
+            var newOwner = _ownerService.CreateOwner(createOwnerDTO);
 
-        return newOwner;
+            return newOwner;
+        }
+        catch (Exception ex)
+        {
+            var errorResponse = Json(new { ex.Message }).Value;
+            return StatusCode(500, errorResponse);
+        }
     }
 
     [HttpPatch("{id}")]
@@ -49,6 +62,20 @@ public class OwnerController : Controller
             var errorResponse = Json(new { ex.Message }).Value;
             return StatusCode(500, errorResponse);
         }
+    }
+
+    [HttpPost("{id}/add-pet")]
+    public IActionResult AddPet(int id, PetDTO petDTO)
+    {
+        var owner = _ownerService.AddPet(id, petDTO);
+
+        if (owner == null)
+        {
+            var response = Json(new { message = "Owner not found" }).Value;
+            return StatusCode(404, response);
+        }
+
+        return Ok(owner);
     }
 
     [HttpDelete("{id}")]

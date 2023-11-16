@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PetCare.Models;
 
 namespace PetCare.Modules.PetModule;

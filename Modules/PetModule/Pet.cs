@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using PetCare.Models;
-using PetCare.Modules.OwnerModule;
 
 namespace PetCare.Modules.PetModule;
 

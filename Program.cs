@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Modules.OwnerModule;
+using PetCare.Modules.PetModule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IOwnerService, OwnerService>();
+builder.Services.AddScoped<IPetService, PetService>();
 
 if (builder.Environment.IsDevelopment())
 {

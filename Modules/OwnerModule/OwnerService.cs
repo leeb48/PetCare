@@ -1,6 +1,4 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Modules.OwnerModule.DTO;
@@ -13,11 +11,13 @@ public class OwnerService : IOwnerService
 {
     private readonly PetCareContext _context;
     private readonly IMapper _mapper;
+    private readonly IPetService _petService;
 
-    public OwnerService(PetCareContext context, IMapper mapper)
+    public OwnerService(PetCareContext context, IMapper mapper, IPetService petService)
     {
         _context = context;
         _mapper = mapper;
+        _petService = petService;
     }
 
     public CreateOwnerDTO CreateOwner(CreateOwnerDTO createOwnerDTO)
@@ -66,11 +66,19 @@ public class OwnerService : IOwnerService
         }
     }
 
-    public Owner AddPet(int id, PetDTO petDTO)
+    public Owner? AddPet(int id, PetDTO petDTO)
     {
-        // link pet and user
-        // when we see a new pet type, create one
-        throw new NotImplementedException();
+        var owner = FindById(id);
+
+        if (owner != null)
+        {
+            var pet = _petService.CreatePet(id, petDTO);
+
+            owner.Pets!.Add(pet);
+
+            _context.SaveChanges();
+        }
+        return owner;
     }
 
     public OwnerDTO? FindByIdDTO(int id)
@@ -90,7 +98,13 @@ public class OwnerService : IOwnerService
                         Birthdate = owner.Birthdate,
                         Pets = owner.Pets!
                             .Select(
-                                pet => new PetDTO { Name = pet.Name, PetType = pet.PetType.Name }
+                                pet =>
+                                    new PetDTO
+                                    {
+                                        Name = pet.Name,
+                                        Birthdate = pet.Birthdate,
+                                        PetTypeName = pet.PetType.Name
+                                    }
                             )
                             .ToList()
                     }
@@ -126,7 +140,7 @@ public class OwnerService : IOwnerService
                                     {
                                         Name = pet.Name,
                                         Birthdate = pet.Birthdate,
-                                        PetType = pet.PetType.Name
+                                        PetTypeName = pet.PetType.Name
                                     }
                             )
                             .ToList()
@@ -159,7 +173,7 @@ public class OwnerService : IOwnerService
                                     {
                                         Name = pet.Name,
                                         Birthdate = pet.Birthdate,
-                                        PetType = pet.PetType.Name
+                                        PetTypeName = pet.PetType.Name
                                     }
                             )
                             .ToList()
