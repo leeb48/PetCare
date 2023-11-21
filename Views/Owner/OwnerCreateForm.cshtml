@@ -1,53 +1,49 @@
 <h1>Owner Create Form</h1>
 
-<form>
+<form hx-post='/owner' hx-ext='json-enc'>
   <div class="row mb-3">
     <div class="col">
       <label for="firstName" class="form-label">First name</label>
-      <input type="text" class="form-control" id="firstName" placeholder="First name" required>
+      <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First name" required>
     </div>
     <div class="col">
       <label for="lastName" class="form-label">Last name</label>
-      <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
+      <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last name" required>
     </div>
   </div>
   <div class="row mb-3">
     <div class="col">
         <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
     </div>
     <div class="col">
         <label for="phoneNumber" class="form-label">Phone</label>
-        <input type="tel" class="form-control" id="phoneNumber" placeholder="#" required>
+        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="#" required>
     </div>
   </div>
 
   <div class="mb-3">
     <label for="birthdate" class="form-label">Birthdate</label>
-    <input type="date" class="form-control" id="birthdate" required>
+    <input type="date" class="form-control" id="birthdate" name="birthdate" required>
   </div>
 
   <div class="mb-3">
     <label for="address" class="form-label">Address</label>
-    <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+    <input type="text" class="form-control" id="address" name='address' placeholder="Stree Address" required>
   </div>
   <div class="row mb-3">
     <div class="col">
       <label for="city" class="form-label">City</label>
-      <input type="text" class="form-control" id="city" required>
+      <input type="text" class="form-control" id="city" name="city" required>
     </div>
     <div class="col">
       <label for="state" class="form-label">State</label>
-      <select class="form-select" id="state" required>
+      <select class="form-select" id="state" name='state' required>
         <option value="">Choose...</option>
         <option>California</option>
         <option>Nevada</option>
         <option>Washington</option>
       </select>
-    </div>
-    <div class="col">
-      <label for="zip" class="form-label">Zip</label>
-      <input type="text" class="form-control" id="zip" required>
     </div>
   </div>
   <div class="mb-3 form-check">
@@ -56,14 +52,3 @@
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-
-<script>
-    @* document.querySelector('#birthdate').addEventListener('input', function(e) {
-    var birthdate = this.value.split("/").join("");
-    if (birthdate.length > 0) {
-        birthdate = birthdate.match(new RegExp('.{1,2}', 'g')).join("/");
-    }
-    this.value = birthdate;
-    }); *@
-</script>

@@ -1,4 +1,3 @@
-using PetCare.Modules.PetModule;
 using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule.DTO;
