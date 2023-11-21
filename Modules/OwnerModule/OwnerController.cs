@@ -12,6 +12,28 @@ public class OwnerController : Controller
     private readonly IOwnerService _ownerService;
     private readonly IMapper _mapper;
 
+    [HttpGet]
+    public IActionResult Owner()
+    {
+        return View();
+    }
+
+    [HttpGet("birthdate/{date}")]
+    public IActionResult FindByBirthdate(DateOnly date)
+    {
+        var owners = _ownerService.FindByBirthdate(date);
+
+        return Ok(owners);
+    }
+
+    [HttpGet("lastName/{lastName}")]
+    public IActionResult FindByLastName(string lastName)
+    {
+        var owners = _ownerService.FindByLastName(lastName);
+
+        return Ok(owners);
+    }
+
     public OwnerController(IOwnerService ownerService, IMapper mapper)
     {
         _ownerService = ownerService;
@@ -70,21 +92,5 @@ public class OwnerController : Controller
         _ownerService.RemoveOwner(id);
 
         return Ok();
-    }
-
-    [HttpGet("birthdate")]
-    public IActionResult FindByBirthdate(DateOnly date)
-    {
-        var owners = _ownerService.FindByBirthdate(date);
-
-        return Ok(owners);
-    }
-
-    [HttpGet]
-    public IActionResult FindByLastName(string lastName)
-    {
-        var owners = _ownerService.FindByLastName(lastName);
-
-        return Ok(owners);
     }
 }
