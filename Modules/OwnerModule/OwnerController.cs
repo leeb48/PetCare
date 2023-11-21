@@ -12,8 +12,21 @@ public class OwnerController : Controller
     private readonly IOwnerService _ownerService;
     private readonly IMapper _mapper;
 
+    public OwnerController(IOwnerService ownerService, IMapper mapper)
+    {
+        _ownerService = ownerService;
+        _mapper = mapper;
+    }
+
     [HttpGet]
     public IActionResult Owner()
+    {
+        var owners = _ownerService.GetOwners(10);
+        return View(owners);
+    }
+
+    [HttpGet("create")]
+    public IActionResult OwnerCreateForm()
     {
         return View();
     }
@@ -32,12 +45,6 @@ public class OwnerController : Controller
         var owners = _ownerService.FindByLastName(lastName);
 
         return Ok(owners);
-    }
-
-    public OwnerController(IOwnerService ownerService, IMapper mapper)
-    {
-        _ownerService = ownerService;
-        _mapper = mapper;
     }
 
     [HttpGet("{id}")]

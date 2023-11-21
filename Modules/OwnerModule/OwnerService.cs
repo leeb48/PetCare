@@ -11,13 +11,30 @@ public class OwnerService : IOwnerService
 {
     private readonly PetCareContext _context;
     private readonly IMapper _mapper;
-    private readonly IPetService _petService;
 
-    public OwnerService(PetCareContext context, IMapper mapper, IPetService petService)
+    public OwnerService(PetCareContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _petService = petService;
+    }
+
+    public IEnumerable<OwnerDTO> GetOwners(int count)
+    {
+        return _context.Owners
+            .OrderBy(owner => owner.LastName)
+            .Take(count)
+            .Select(
+                owner =>
+                    new OwnerDTO
+                    {
+                        Id = owner.Id,
+                        FirstName = owner.FirstName,
+                        LastName = owner.LastName,
+                        PhoneNumber = owner.PhoneNumber,
+                        Email = owner.Email,
+                        Birthdate = owner.Birthdate
+                    }
+            );
     }
 
     public CreateOwnerDTO CreateOwner(CreateOwnerDTO createOwnerDTO)
