@@ -64,20 +64,6 @@ public class OwnerController : Controller
         }
     }
 
-    [HttpPost("{id}/add-pet")]
-    public IActionResult AddPet(int id, PetDTO petDTO)
-    {
-        var owner = _ownerService.AddPet(id, petDTO);
-
-        if (owner == null)
-        {
-            var response = Json(new { message = "Owner not found" }).Value;
-            return StatusCode(404, response);
-        }
-
-        return Ok(owner);
-    }
-
     [HttpDelete("{id}")]
     public IActionResult DeleteOwner(int id)
     {

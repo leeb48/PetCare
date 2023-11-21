@@ -66,21 +66,6 @@ public class OwnerService : IOwnerService
         }
     }
 
-    public Owner? AddPet(int id, PetDTO petDTO)
-    {
-        var owner = FindById(id);
-
-        if (owner != null)
-        {
-            var pet = _petService.CreatePet(id, petDTO);
-
-            owner.Pets!.Add(pet);
-
-            _context.SaveChanges();
-        }
-        return owner;
-    }
-
     public OwnerDTO? FindByIdDTO(int id)
     {
         var query = from owner in _context.Owners where owner.Id == id select owner;
@@ -101,6 +86,7 @@ public class OwnerService : IOwnerService
                                 pet =>
                                     new PetDTO
                                     {
+                                        Id = pet.Id,
                                         Name = pet.Name,
                                         Birthdate = pet.Birthdate,
                                         PetTypeName = pet.PetType.Name
@@ -138,6 +124,7 @@ public class OwnerService : IOwnerService
                                 pet =>
                                     new PetDTO
                                     {
+                                        Id = pet.Id,
                                         Name = pet.Name,
                                         Birthdate = pet.Birthdate,
                                         PetTypeName = pet.PetType.Name
@@ -171,6 +158,7 @@ public class OwnerService : IOwnerService
                                 pet =>
                                     new PetDTO
                                     {
+                                        Id = pet.Id,
                                         Name = pet.Name,
                                         Birthdate = pet.Birthdate,
                                         PetTypeName = pet.PetType.Name

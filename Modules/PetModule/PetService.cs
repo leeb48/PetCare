@@ -30,11 +30,11 @@ public class PetService : IPetService
 
     public Pet CreatePet(int ownerId, PetDTO petDTO)
     {
-        var petType = GetPetType(petDTO.PetTypeName);
+        var petType = GetPetType(petDTO.PetTypeName!);
 
         var newPet = new Pet
         {
-            Name = petDTO.Name,
+            Name = petDTO.Name!,
             Birthdate = petDTO.Birthdate,
             PetType = petType,
             OwnerId = ownerId
@@ -45,5 +45,20 @@ public class PetService : IPetService
         _context.SaveChanges();
 
         return newPet;
+    }
+
+    public void RemovePet(int ownerId, int petId)
+    {
+        var pet =
+            _context.Pets.Where(pet => pet.Id == petId).FirstOrDefault()
+            ?? throw new Exception($"Pet with ID: {petId} not found");
+
+        if (pet.OwnerId != ownerId)
+        {
+            throw new Exception("Pet does not belong to the owner");
+        }
+
+        _context.Pets.Remove(pet);
+        _context.SaveChanges();
     }
 }
