@@ -13,9 +13,12 @@ public class Owner : BaseEntity
     public required string Address { get; set; }
 
     public required string State { get; set; }
+    public required string City { get; set; }
 
+    [MaxLength(10)]
     public required string PhoneNumber { get; set; }
 
+    [EmailAddress]
     public required string Email { get; set; }
 
     [DataType(DataType.Date)]

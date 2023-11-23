@@ -16,7 +16,7 @@
         @foreach (var ownerDto in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => ownerDto.LastName), @Html.DisplayFor(modelItem => ownerDto.FirstName)</td>
+                <td><a href="/owner/@ownerDto.Id" class="btn btn-outline-primary">@Html.DisplayFor(modelItem => ownerDto.LastName), @Html.DisplayFor(modelItem => ownerDto.FirstName)</a></td>
                 <td>@Html.DisplayFor(modelItem => ownerDto.PhoneNumber)</td>
                 <td>@Html.DisplayFor(modelItem => ownerDto.Email)</td>
                 <td>@Html.DisplayFor(modelItem => ownerDto.Birthdate)</td>

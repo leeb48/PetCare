@@ -98,6 +98,11 @@ public class OwnerService : IOwnerService
                         FirstName = owner.FirstName,
                         LastName = owner.LastName,
                         Birthdate = owner.Birthdate,
+                        Email = owner.Email,
+                        PhoneNumber = owner.PhoneNumber,
+                        Address = owner.Address,
+                        City = owner.City,
+                        State = owner.State,
                         Pets = owner.Pets!
                             .Select(
                                 pet =>

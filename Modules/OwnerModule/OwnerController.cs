@@ -48,27 +48,27 @@ public class OwnerController : Controller
     }
 
     [HttpGet("{id}")]
-    public ActionResult<OwnerDTO> GetOwnerById(int id)
+    public IActionResult OwnerById(int id)
     {
         var owner = _ownerService.FindByIdDTO(id);
 
         if (owner == null)
         {
-            var response = Json(new { message = "Not found" }).Value;
-            return StatusCode(404, response);
+            return View("NotFound");
         }
 
-        return owner;
+        return View(owner);
     }
 
     [HttpPost]
-    public ActionResult<CreateOwnerDTO> CreateOwner(CreateOwnerDTO createOwnerDTO)
+    public IActionResult CeateOwner(CreateOwnerDTO createOwnerDTO)
     {
         try
         {
             var newOwner = _ownerService.CreateOwner(createOwnerDTO);
 
-            return newOwner;
+            Response.Headers.Add("HX-Redirect", "/owner");
+            return Ok(newOwner);
         }
         catch (Exception ex)
         {

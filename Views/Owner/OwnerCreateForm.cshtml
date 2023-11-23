@@ -1,5 +1,7 @@
 <h1>Owner Create Form</h1>
 
+<div id="error-alert"></div>
+
 <form hx-post='/owner' hx-ext='json-enc'>
   <div class="row mb-3">
     <div class="col">
@@ -14,11 +16,11 @@
   <div class="row mb-3">
     <div class="col">
         <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+        <input class="form-control" id="email" name="email" placeholder="name@example.com" required>
     </div>
     <div class="col">
         <label for="phoneNumber" class="form-label">Phone</label>
-        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="#" required>
+        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="#" minlength="10" maxlength="10" required>
     </div>
   </div>
 
@@ -52,3 +54,16 @@
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+<script>
+  document.querySelector('form').addEventListener('htmx:responseError', function(event) {
+    if (event.detail?.xhr?.response)
+    {
+      const alertElement = document.createElement('div')
+      alertElement.id = 'error-alert'
+      alertElement.className = 'alert alert-danger';
+      alertElement.innerText = 'Server Error'
+      document.getElementById('error-alert').replaceWith(alertElement)
+    }
+  });
+</script>
