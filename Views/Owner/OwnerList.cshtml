@@ -1,0 +1,28 @@
+@using PetCare.Modules.OwnerModule.DTO
+@model IEnumerable<OwnerDTO>
+
+<h1>Owner Page</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Birthdate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ownerDto in Model)
+        {
+            <tr>
+                <td><a href="/owner/@ownerDto.Id" class="btn btn-outline-primary">@Html.DisplayFor(modelItem => ownerDto.LastName), @Html.DisplayFor(modelItem => ownerDto.FirstName)</a></td>
+                <td>@Html.DisplayFor(modelItem => ownerDto.PhoneNumber)</td>
+                <td>@Html.DisplayFor(modelItem => ownerDto.Email)</td>
+                <td>@Html.DisplayFor(modelItem => ownerDto.Birthdate)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/owner/create" class="btn btn-primary" role="button">Create New Owner</a>

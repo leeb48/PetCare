@@ -1,12 +1,12 @@
 using PetCare.Modules.OwnerModule.DTO;
-using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
 
 public interface IOwnerService
 {
+    public IEnumerable<OwnerDTO> GetOwners(int count);
     public CreateOwnerDTO CreateOwner(CreateOwnerDTO createOwnerDTO);
-    public OwnerDTO UpdateOwner(int id, OwnerDTO ownerDTO);
+    public CreateOwnerDTO UpdateOwner(int id, CreateOwnerDTO ownerDTO);
     public void RemoveOwner(int id);
     public Owner? FindById(int id);
     public OwnerDTO? FindByIdDTO(int id);

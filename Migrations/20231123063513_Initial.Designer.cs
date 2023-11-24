@@ -11,7 +11,7 @@ using PetCare.Data;
 namespace PetCare.Migrations
 {
     [DbContext(typeof(PetCareContext))]
-    [Migration("20231115064002_Initial")]
+    [Migration("20231123063513_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -30,7 +30,10 @@ namespace PetCare.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateOnly?>("Birthdate")
+                    b.Property<DateOnly>("Birthdate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -48,6 +51,7 @@ namespace PetCare.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
+                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")

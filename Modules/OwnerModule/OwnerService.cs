@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Modules.OwnerModule.DTO;
-using PetCare.Modules.PetModule;
 using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
@@ -11,13 +10,30 @@ public class OwnerService : IOwnerService
 {
     private readonly PetCareContext _context;
     private readonly IMapper _mapper;
-    private readonly IPetService _petService;
 
-    public OwnerService(PetCareContext context, IMapper mapper, IPetService petService)
+    public OwnerService(PetCareContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _petService = petService;
+    }
+
+    public IEnumerable<OwnerDTO> GetOwners(int count)
+    {
+        return _context.Owners
+            .OrderBy(owner => owner.LastName)
+            .Take(count)
+            .Select(
+                owner =>
+                    new OwnerDTO
+                    {
+                        Id = owner.Id,
+                        FirstName = owner.FirstName,
+                        LastName = owner.LastName,
+                        PhoneNumber = owner.PhoneNumber,
+                        Email = owner.Email,
+                        Birthdate = owner.Birthdate
+                    }
+            );
     }
 
     public CreateOwnerDTO CreateOwner(CreateOwnerDTO createOwnerDTO)
@@ -32,11 +48,11 @@ public class OwnerService : IOwnerService
         return createOwnerDTO;
     }
 
-    public OwnerDTO UpdateOwner(int id, OwnerDTO ownerDTO)
+    public CreateOwnerDTO UpdateOwner(int id, CreateOwnerDTO ownerDTO)
     {
         var owner = FindById(id) ?? throw new Exception("Owner not found");
 
-        foreach (var dtoProp in typeof(OwnerDTO).GetProperties())
+        foreach (var dtoProp in typeof(CreateOwnerDTO).GetProperties())
         {
             var dtoValue = dtoProp.GetValue(ownerDTO);
 
@@ -50,7 +66,7 @@ public class OwnerService : IOwnerService
 
         _context.SaveChanges();
 
-        ownerDTO = _mapper.Map<OwnerDTO>(owner);
+        ownerDTO = _mapper.Map<CreateOwnerDTO>(owner);
 
         return ownerDTO;
     }
@@ -81,6 +97,11 @@ public class OwnerService : IOwnerService
                         FirstName = owner.FirstName,
                         LastName = owner.LastName,
                         Birthdate = owner.Birthdate,
+                        Email = owner.Email,
+                        PhoneNumber = owner.PhoneNumber,
+                        Address = owner.Address,
+                        City = owner.City,
+                        State = owner.State,
                         Pets = owner.Pets!
                             .Select(
                                 pet =>

@@ -1,3 +1,4 @@
+using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PetCare.Modules.OwnerModule.DTO;
@@ -18,28 +19,70 @@ public class OwnerController : Controller
         _mapper = mapper;
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<OwnerDTO> GetOwnerById(int id)
+    [HttpGet]
+    public IActionResult OwnerList()
+    {
+        var owners = _ownerService.GetOwners(10);
+        return View(owners);
+    }
+
+    [HttpGet("create")]
+    public IActionResult OwnerCreateForm()
+    {
+        return View();
+    }
+
+    [HttpGet("{id}/edit")]
+    public IActionResult OwnerEditForm(int id)
     {
         var owner = _ownerService.FindByIdDTO(id);
 
         if (owner == null)
         {
-            var response = Json(new { message = "Not found" }).Value;
-            return StatusCode(404, response);
+            return View("NotFound");
         }
 
-        return owner;
+        return View(owner);
+    }
+
+    [HttpGet("birthdate/{date}")]
+    public IActionResult FindByBirthdate(DateOnly date)
+    {
+        var owners = _ownerService.FindByBirthdate(date);
+
+        return Ok(owners);
+    }
+
+    [HttpGet("lastName/{lastName}")]
+    public IActionResult FindByLastName(string lastName)
+    {
+        var owners = _ownerService.FindByLastName(lastName);
+
+        return Ok(owners);
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult OwnerDetail(int id)
+    {
+        var owner = _ownerService.FindByIdDTO(id);
+
+        if (owner == null)
+        {
+            return View("NotFound");
+        }
+
+        return View(owner);
     }
 
     [HttpPost]
-    public ActionResult<CreateOwnerDTO> CreateOwner(CreateOwnerDTO createOwnerDTO)
+    public async Task<IActionResult> CeateOwner(CreateOwnerDTO createOwnerDTO)
     {
         try
         {
             var newOwner = _ownerService.CreateOwner(createOwnerDTO);
 
-            return newOwner;
+            Response.Headers.Add("HX-Redirect", "/owner");
+            return Ok(newOwner);
         }
         catch (Exception ex)
         {
@@ -49,13 +92,14 @@ public class OwnerController : Controller
     }
 
     [HttpPatch("{id}")]
-    public ActionResult<OwnerDTO> UpdateOwner(int id, OwnerDTO ownerDTO)
+    public IActionResult UpdateOwner(int id, CreateOwnerDTO ownerDTO)
     {
         try
         {
             var updatedOwner = _ownerService.UpdateOwner(id, ownerDTO);
 
-            return updatedOwner;
+            Response.Headers.Add("HX-Redirect", $"/owner/{id}");
+            return Ok(updatedOwner);
         }
         catch (Exception ex)
         {
@@ -70,21 +114,5 @@ public class OwnerController : Controller
         _ownerService.RemoveOwner(id);
 
         return Ok();
-    }
-
-    [HttpGet("birthdate")]
-    public IActionResult FindByBirthdate(DateOnly date)
-    {
-        var owners = _ownerService.FindByBirthdate(date);
-
-        return Ok(owners);
-    }
-
-    [HttpGet]
-    public IActionResult FindByLastName(string lastName)
-    {
-        var owners = _ownerService.FindByLastName(lastName);
-
-        return Ok(owners);
     }
 }
