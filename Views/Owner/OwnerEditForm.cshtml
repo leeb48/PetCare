@@ -28,7 +28,7 @@
   </div>
   <div class="mb-3">
     <label for="birthdate" class="form-label">Birthdate</label>
-    <input type="date" class="form-control" id="birthdate" name="birthdate" value="@DateOnly.Parse(Model.Birthdate!.ToString()).ToString("o")" required>
+    <input type="date" class="form-control" id="birthdate" name="birthdate" value="@Model.Birthdate!.Value.ToString("o")" required>
   </div>
   <div class="mb-3">
     <label for="address" class="form-label">Address</label>

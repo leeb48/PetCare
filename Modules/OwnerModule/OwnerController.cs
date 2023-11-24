@@ -1,6 +1,8 @@
+using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PetCare.Modules.OwnerModule.DTO;
+using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
 
@@ -73,7 +75,7 @@ public class OwnerController : Controller
     }
 
     [HttpPost]
-    public IActionResult CeateOwner(CreateOwnerDTO createOwnerDTO)
+    public async Task<IActionResult> CeateOwner(CreateOwnerDTO createOwnerDTO)
     {
         try
         {

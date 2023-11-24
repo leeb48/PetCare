@@ -96,14 +96,63 @@
       </select>
     </div>
   </div>
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="terms" required>
-    <label class="form-check-label" for="terms">Agree to terms and conditions</label>
-  </div>
+
+  <hr/>
+
+  <table id="pet-table" class="table">
+  <thead>
+      <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Type</th>
+      <th scope="col">Birthdate</th>
+      <th></th>
+      </tr>
+  </thead>
+  <tbody>
+          <tr>
+          <th scope="row">
+            <input type="text" class="form-control" id="pet-name-input" name="petName" placeholder="Pet Name">
+          </th>
+          <td>
+            <input type="text" class="form-control" id="pet-type-input" name="petType" placeholder="Pet Type">
+          </td>
+          <td>
+            <input type="date" class="form-control" id="pet-birthdate-input" name="petBirthdate">
+          </td>
+          <td>
+            <button id="add-pet-btn" class="btn btn-outline-success">Add</button>
+          </td>
+          </tr>
+  </tbody>
+  </table>
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
+
 <script>
+
+  document.getElementById('add-pet-btn').onclick = (e) => {
+    e.preventDefault();
+    const petName = document.getElementById('pet-name-input').value || 'Mango';
+    const petType = document.getElementById('pet-type-input').value || 'Dog';
+    const petBirthdate = document.getElementById('pet-birthdate-input').value || '04/05/2023';
+
+    if (!petName || !petType || !petBirthdate) return;
+
+    const petTable = document.getElementById('pet-table');
+    const row = petTable.insertRow();
+    const nameCell = row.insertCell(0);
+    const petTypeCell = row.insertCell(1);
+    const birthdateCell = row.insertCell(2);
+    const remove = row.insertCell(3);
+
+    nameCell.innerHTML = petName;
+    petTypeCell.innerHTML = petType;
+    birthdateCell.innerHTML = petBirthdate;
+    remove.innerHTML = `<button class="btn btn-outline-danger">X</button>`
+  }
+
   document.querySelector('form').addEventListener('htmx:responseError', function(event) {
     if (event.detail?.xhr?.response)
     {
