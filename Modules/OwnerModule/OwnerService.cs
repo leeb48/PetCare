@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Modules.OwnerModule.DTO;
-using PetCare.Modules.PetModule;
 using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
@@ -49,11 +48,11 @@ public class OwnerService : IOwnerService
         return createOwnerDTO;
     }
 
-    public OwnerDTO UpdateOwner(int id, OwnerDTO ownerDTO)
+    public CreateOwnerDTO UpdateOwner(int id, CreateOwnerDTO ownerDTO)
     {
         var owner = FindById(id) ?? throw new Exception("Owner not found");
 
-        foreach (var dtoProp in typeof(OwnerDTO).GetProperties())
+        foreach (var dtoProp in typeof(CreateOwnerDTO).GetProperties())
         {
             var dtoValue = dtoProp.GetValue(ownerDTO);
 
@@ -67,7 +66,7 @@ public class OwnerService : IOwnerService
 
         _context.SaveChanges();
 
-        ownerDTO = _mapper.Map<OwnerDTO>(owner);
+        ownerDTO = _mapper.Map<CreateOwnerDTO>(owner);
 
         return ownerDTO;
     }

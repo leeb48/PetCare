@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PetCare.Modules.OwnerModule.DTO;
-using PetCare.Modules.PetModule.DTO;
 
 namespace PetCare.Modules.OwnerModule;
 
@@ -19,7 +18,7 @@ public class OwnerController : Controller
     }
 
     [HttpGet]
-    public IActionResult Owner()
+    public IActionResult OwnerList()
     {
         var owners = _ownerService.GetOwners(10);
         return View(owners);
@@ -29,6 +28,19 @@ public class OwnerController : Controller
     public IActionResult OwnerCreateForm()
     {
         return View();
+    }
+
+    [HttpGet("{id}/edit")]
+    public IActionResult OwnerEditForm(int id)
+    {
+        var owner = _ownerService.FindByIdDTO(id);
+
+        if (owner == null)
+        {
+            return View("NotFound");
+        }
+
+        return View(owner);
     }
 
     [HttpGet("birthdate/{date}")]
@@ -48,7 +60,7 @@ public class OwnerController : Controller
     }
 
     [HttpGet("{id}")]
-    public IActionResult OwnerById(int id)
+    public IActionResult OwnerDetail(int id)
     {
         var owner = _ownerService.FindByIdDTO(id);
 
@@ -78,13 +90,14 @@ public class OwnerController : Controller
     }
 
     [HttpPatch("{id}")]
-    public ActionResult<OwnerDTO> UpdateOwner(int id, OwnerDTO ownerDTO)
+    public IActionResult UpdateOwner(int id, CreateOwnerDTO ownerDTO)
     {
         try
         {
             var updatedOwner = _ownerService.UpdateOwner(id, ownerDTO);
 
-            return updatedOwner;
+            Response.Headers.Add("HX-Redirect", $"/owner/{id}");
+            return Ok(updatedOwner);
         }
         catch (Exception ex)
         {

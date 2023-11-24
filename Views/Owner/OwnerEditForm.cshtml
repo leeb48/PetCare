@@ -1,42 +1,43 @@
-<h1>Owner Create Form</h1>
+@using PetCare.Modules.OwnerModule.DTO
+@model OwnerDTO
+
+<h1>Edit Owner</h1>
 
 <div id="error-alert"></div>
 
-<form hx-post='/owner' hx-ext='json-enc'>
+<form hx-patch='/owner/@Model.Id' hx-ext='json-enc'>
   <div class="row mb-3">
     <div class="col">
       <label for="firstName" class="form-label">First name</label>
-      <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First name" required>
+      <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First name" value="@Model.FirstName" required>
     </div>
     <div class="col">
       <label for="lastName" class="form-label">Last name</label>
-      <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last name" required>
+      <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last name" value="@Model.LastName" required>
     </div>
   </div>
   <div class="row mb-3">
     <div class="col">
         <label for="email" class="form-label">Email address</label>
-        <input class="form-control" id="email" name="email" placeholder="name@example.com" required>
+        <input class="form-control" id="email" name="email" placeholder="name@example.com" value="@Model.Email" required>
     </div>
     <div class="col">
         <label for="phoneNumber" class="form-label">Phone</label>
-        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="#" minlength="10" maxlength="10" required>
+        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="#" minlength="10" maxlength="10" value="@Model.PhoneNumber" required>
     </div>
   </div>
-
   <div class="mb-3">
     <label for="birthdate" class="form-label">Birthdate</label>
-    <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+    <input type="date" class="form-control" id="birthdate" name="birthdate" value="@DateOnly.Parse(Model.Birthdate!.ToString()).ToString("o")" required>
   </div>
-
   <div class="mb-3">
     <label for="address" class="form-label">Address</label>
-    <input type="text" class="form-control" id="address" name='address' placeholder="Stree Address" required>
+    <input type="text" class="form-control" id="address" name='address' placeholder="Stree Address" value="@Model.Address" required>
   </div>
   <div class="row mb-3">
     <div class="col">
       <label for="city" class="form-label">City</label>
-      <input type="text" class="form-control" id="city" name="city" required>
+      <input type="text" class="form-control" id="city" name="city" value="@Model.City" required>
     </div>
     <div class="col">
       <label for="state" class="form-label">State</label>
@@ -96,22 +97,27 @@
       </select>
     </div>
   </div>
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="terms" required>
-    <label class="form-check-label" for="terms">Agree to terms and conditions</label>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary">Update</button>
 </form>
 
 <script>
-  document.querySelector('form').addEventListener('htmx:responseError', function(event) {
-    if (event.detail?.xhr?.response)
-    {
-      const alertElement = document.createElement('div')
-      alertElement.id = 'error-alert'
-      alertElement.className = 'alert alert-danger';
-      alertElement.innerText = 'Server Error'
-      document.getElementById('error-alert').replaceWith(alertElement)
+
+    const oldState = '@Model.State'
+    const stateOptions = document.getElementById('state').options
+    for(let i = 0; i < stateOptions.length; ++i) {
+        if (stateOptions[i].value == oldState) {
+            stateOptions[i].setAttribute('selected', true)
+        }
     }
-  });
+
+    document.querySelector('form').addEventListener('htmx:responseError', function(event) {
+        if (event.detail?.xhr?.response)
+        {
+        const alertElement = document.createElement('div')
+        alertElement.id = 'error-alert'
+        alertElement.className = 'alert alert-danger';
+        alertElement.innerText = 'Server Error'
+        document.getElementById('error-alert').replaceWith(alertElement)
+        }
+    });
 </script>
